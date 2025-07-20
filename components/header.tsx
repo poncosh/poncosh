@@ -12,6 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { HeaderLogo } from "./logos/header-logo";
+import { useResponsiveContext } from "@/contexts/responsive-context";
+import { MobileDropdownMenu } from "./parts/mobile-dropdown-menu";
 
 export default function Header({
   social_linkedin,
@@ -23,6 +25,7 @@ export default function Header({
   social_email: string;
 }) {
   const { setTheme } = useTheme();
+  const { isLowScreen } = useResponsiveContext();
 
   return (
     <header className="z-30 fixed w-full border-b-1">
@@ -30,23 +33,35 @@ export default function Header({
         className="relative mx-auto flex min-h-[10vh] justify-between items-center p-2 py-4 px-6 lg:px-4 border-b-2 border-slate-200"
         aria-label="Global"
       >
-        <div className="flex gap-2 z-10">
-          <Link href={social_linkedin} target="_blank">
-            <Button className="cursor-pointer" variant="outline" size="icon">
-              <Linkedin className="h-4 w-4" />
-            </Button>
-          </Link>
-          <Link href={social_medium} target="_blank">
-            <Button className="cursor-pointer" variant="outline" size="icon">
-              <PenLine className="h-4 w-4" />
-            </Button>
-          </Link>
-          <a href={social_email} target="_blank">
-            <Button className="cursor-pointer" variant="outline" size="icon">
-              <Mail className="h-4 w-4" />
-            </Button>
-          </a>
-        </div>
+        {isLowScreen ? (
+          <MobileDropdownMenu
+            social_linkedin={social_linkedin}
+            social_medium={social_medium}
+            social_email={social_email}
+            Linkedin={Linkedin}
+            Mail={Mail}
+            PenLine={PenLine}
+          />
+        ) : (
+          <div className="flex gap-2 z-10">
+            <Link href={social_linkedin} target="_blank">
+              <Button className="cursor-pointer" variant="outline" size="icon">
+                <Linkedin className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href={social_medium} target="_blank">
+              <Button className="cursor-pointer" variant="outline" size="icon">
+                <PenLine className="h-4 w-4" />
+              </Button>
+            </Link>
+            <a href={social_email} target="_blank">
+              <Button className="cursor-pointer" variant="outline" size="icon">
+                <Mail className="h-4 w-4" />
+              </Button>
+            </a>
+          </div>
+        )}
+
         <div
           id="logo"
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
