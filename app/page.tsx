@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 
-("use server");
+"use server";
 
 import HomepageClient from "@/clients/client";
 import LandingPage from "@/models/LandingPage";
