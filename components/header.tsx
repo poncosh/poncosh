@@ -28,7 +28,7 @@ export default function Header({
   social_github: string;
 }) {
   const { theme, systemTheme, setTheme } = useTheme();
-
+  const { isLowScreen } = useResponsiveContext();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -44,7 +44,6 @@ export default function Header({
   const bgColor = currentTheme === "dark" ? "#18181B" : "#FBFAF9";
   const logoSrc =
     currentTheme === "dark" ? "/poncosh-logo-dark.png" : "/poncosh-logo.png";
-  const { isLowScreen } = useResponsiveContext();
 
   return (
     <header
