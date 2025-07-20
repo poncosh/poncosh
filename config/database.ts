@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+import pg from "pg";
 
 // Optional: You may want to validate or cast the env vars
 const database = process.env.POSTGRES_DATABASE as string;
@@ -11,6 +12,7 @@ const sequelize = new Sequelize(database, username, password, {
   host,
   port,
   dialect: "postgres",
+  dialectModule: pg,
 });
 
 export default sequelize;
