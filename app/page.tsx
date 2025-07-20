@@ -2,7 +2,7 @@
 
 import { useResponsiveContext } from "@/contexts/responsive-context";
 
-export default async function Home() {
+export default function Home() {
   const { description } = useResponsiveContext();
   return <div>{description}</div>;
 }
