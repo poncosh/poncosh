@@ -4,8 +4,10 @@ import { createContext, useContext, useState } from "react";
 
 const ResponsiveContext = createContext<{
   isLowScreen: boolean;
+  description: string;
 }>({
   isLowScreen: false,
+  description: "",
 });
 
 export function useResponsiveContext() {
@@ -14,8 +16,10 @@ export function useResponsiveContext() {
 
 export default function ResponsiveProvider({
   children,
+  description,
 }: {
   children: React.ReactNode;
+  description: string;
 }) {
   const isClient = typeof window !== "undefined";
 
@@ -25,6 +29,7 @@ export default function ResponsiveProvider({
 
   const exportedVal = {
     isLowScreen: isValidLowScreen,
+    description: description,
   };
 
   return (

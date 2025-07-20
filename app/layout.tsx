@@ -1,8 +1,15 @@
+export const dynamic = "force-dynamic";
+
+import LandingPage from "@/models/LandingPage";
+import SystemParameter from "@/models/SystemParameter";
+import LandingPageType from "@/models/types/landing-page-types";
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../contexts/theme-provider";
 import ResponsiveProvider from "@/contexts/responsive-context";
+import Header from "@/components/header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,11 +27,31 @@ export const metadata: Metadata = {
     "A personal website of Satrio Ponco Sushadi, showcasing my work and interests in software engineering.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const param = await SystemParameter.findOne({
+    where: { name: "LP_VER" },
+  });
+
+  if (!param) {
+    return <div>Parameter not found</div>;
+  }
+
+  const version = param.value;
+
+  const landingPage = await LandingPage.findOne({
+    where: { version },
+  });
+
+  if (!landingPage) {
+    return <div>Landing page not found for version {version}</div>;
+  }
+
+  const landingPageData: LandingPageType = landingPage.toJSON();
+
   return (
     <html lang="en">
       <body
@@ -36,7 +63,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ResponsiveProvider>{children}</ResponsiveProvider>
+          <ResponsiveProvider description={landingPageData.description}>
+            <Header
+              social_linkedin={landingPageData.social_linkedin}
+              social_medium={landingPageData.social_medium}
+              social_email={landingPageData.social_email}
+            />
+            {children}
+          </ResponsiveProvider>
         </ThemeProvider>
       </body>
     </html>
