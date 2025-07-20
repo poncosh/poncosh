@@ -16,13 +16,16 @@ export function MobileDropdownMenu({
   social_linkedin,
   social_medium,
   social_email,
+  social_github,
   Linkedin,
   Mail,
   PenLine,
+  Github,
 }: {
   social_linkedin: string;
   social_medium: string;
   social_email: string;
+  social_github: string;
   Linkedin: React.ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
   >;
@@ -30,6 +33,9 @@ export function MobileDropdownMenu({
     Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
   >;
   PenLine: React.ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+  >;
+  Github: React.ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
   >;
 }) {
@@ -47,6 +53,13 @@ export function MobileDropdownMenu({
           <Link href={social_linkedin} target="_blank">
             <Button className="cursor-pointer" variant="outline" size="icon">
               <Linkedin className="h-4 w-4" />
+            </Button>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={social_github} target="_blank">
+            <Button className="cursor-pointer" variant="outline" size="icon">
+              <Github className="h-4 w-4" />
             </Button>
           </Link>
         </DropdownMenuItem>

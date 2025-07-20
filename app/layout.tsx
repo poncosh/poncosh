@@ -68,8 +68,9 @@ export default async function RootLayout({
               social_linkedin={landingPageData.social_linkedin}
               social_medium={landingPageData.social_medium}
               social_email={landingPageData.social_email}
+              social_github={landingPageData.social_github}
             />
-            {children}
+            <div>{children}</div>
           </ResponsiveProvider>
         </ThemeProvider>
       </body>

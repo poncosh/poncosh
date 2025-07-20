@@ -16,6 +16,7 @@ class LandingPage extends Model<
   declare social_linkedin: string | null;
   declare social_medium: string | null;
   declare social_email: string | null;
+  declare social_github: string | null;
 }
 
 LandingPage.init(
@@ -42,6 +43,10 @@ LandingPage.init(
       allowNull: true,
     },
     social_email: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    social_github: {
       type: DataTypes.STRING,
       allowNull: true,
     },

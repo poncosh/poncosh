@@ -4,31 +4,53 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Mail, Linkedin, PenLine } from "lucide-react";
+import { Mail, Linkedin, PenLine, Github } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { HeaderLogo } from "./logos/header-logo";
 import { useResponsiveContext } from "@/contexts/responsive-context";
 import { MobileDropdownMenu } from "./parts/mobile-dropdown-menu";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Header({
   social_linkedin,
   social_medium,
   social_email,
+  social_github,
 }: {
   social_linkedin: string;
   social_medium: string;
   social_email: string;
+  social_github: string;
 }) {
-  const { setTheme } = useTheme();
+  const { theme, systemTheme, setTheme } = useTheme();
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    // Render nothing until mounted to avoid hydration mismatch
+    return null;
+  }
+
+  const currentTheme = theme === "system" ? systemTheme : theme;
+  const bgColor = currentTheme === "dark" ? "#18181B" : "#FBFAF9";
+  const logoSrc =
+    currentTheme === "dark" ? "/poncosh-logo-dark.png" : "/poncosh-logo.png";
   const { isLowScreen } = useResponsiveContext();
 
   return (
-    <header className="z-30 fixed w-full border-b-1">
+    <header
+      className="z-30 fixed w-full border-b-1"
+      style={{ backgroundColor: bgColor }}
+    >
       <nav
         className="relative mx-auto flex min-h-[10vh] justify-between items-center p-2 py-4 px-6 lg:px-4 border-b-2 border-slate-200"
         aria-label="Global"
@@ -38,15 +60,22 @@ export default function Header({
             social_linkedin={social_linkedin}
             social_medium={social_medium}
             social_email={social_email}
+            social_github={social_github}
             Linkedin={Linkedin}
             Mail={Mail}
             PenLine={PenLine}
+            Github={Github}
           />
         ) : (
           <div className="flex gap-2 z-10">
             <Link href={social_linkedin} target="_blank">
               <Button className="cursor-pointer" variant="outline" size="icon">
                 <Linkedin className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href={social_github} target="_blank">
+              <Button className="cursor-pointer" variant="outline" size="icon">
+                <Github className="h-4 w-4" />
               </Button>
             </Link>
             <Link href={social_medium} target="_blank">
@@ -68,7 +97,13 @@ export default function Header({
         >
           <Link href="/" className="inline-block p-1.5">
             <span className="sr-only">Poncosh</span>
-            <HeaderLogo />
+            <Image
+              src={logoSrc}
+              alt="Poncosh Logo"
+              width={150}
+              height={40}
+              priority
+            />
           </Link>
         </div>
         <div className="flex items-center z-10">

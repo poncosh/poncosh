@@ -5,4 +5,5 @@ export default interface LandingPageType {
   social_linkedin: string;
   social_medium: string;
   social_email: string;
+  social_github: string;
 }
