@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       pg: "commonjs pg",
       "pg-hstore": "commonjs pg-hstore",
     };
+    return config;
   },
 };
 
