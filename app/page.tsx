@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <div
       style={{ backgroundColor: bgColor }}
-      className="mx-4 px-14 md:mx-32 md:px-44 flex flex-col gap-4 pt-28 md:pt-32 min-h-screen border-r-2 border-l-2 border-black-800 shadow-sm"
+      className="mx-4 px-14 md:mx-32 md:px-44 flex flex-col gap-4 pt-32 md:pt-32 min-h-screen border-r-2 border-l-2 border-black-800 shadow-sm"
     >
       <div className="flex flex-wrap md:flex-nowrap items-start gap-2 md:gap-10 w-full">
         <Image
