@@ -34,12 +34,14 @@ export default function Home() {
 
     const glideInstances: any[] = [];
 
+    const perView = window.innerWidth < 768 ? 1 : 3;
+
     projectData.forEach((project) => {
       const el = document.getElementById(`glide-${project.id}`);
       if (el) {
         const glide = new Glide(el, {
           type: "slider",
-          perView: 3,
+          perView,
           gap: 16,
         });
         glide.mount();
