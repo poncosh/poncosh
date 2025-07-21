@@ -148,7 +148,7 @@ export default function Home() {
         </h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="order-2 md:order-1 flex flex-col gap-4 items-start">
+        <div className="order-2 md:order-1 flex flex-col gap-4 w-full">
           <h2 className="font-semibold text-2xl">My Showcase</h2>
           <p style={{ color: textColor }}>
             Here are some of my projects that I have worked on.
@@ -157,7 +157,7 @@ export default function Home() {
             <div
               key={project.id}
               style={{ backgroundColor: bgColorStac }}
-              className="rounded-xl shadow p-6 space-y-4 h-fit duration-200 hover:scale-102"
+              className="rounded-xl shadow p-6 space-y-4 w-full duration-200 hover:scale-102"
             >
               <h6 className="text-xl font-semibold">{project.project_name}</h6>
               <div className="glide" id={`glide-${project.id}`}>
