@@ -2,11 +2,15 @@
 
 import { useResponsiveContext } from "@/contexts/responsive-context";
 import { useTheme } from "next-themes";
+import { Inter } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+const inter = Inter({ weight: "800", subsets: ["latin"] });
+
 export default function Home() {
-  const { isLowScreen, description, bannerPictures } = useResponsiveContext();
+  const { isLowScreen, description, bannerPictures, quote } =
+    useResponsiveContext();
   const { theme, systemTheme } = useTheme();
 
   const [mounted, setMounted] = useState(false);
@@ -98,6 +102,13 @@ export default function Home() {
             </div>
           ))}
         </div>
+      </div>
+      <div className="py-16 w-full flex justify-center">
+        <h1
+          className={`${inter.className} text-4xl font-extrabold text-center whitespace-pre-line`}
+        >
+          {quote}
+        </h1>
       </div>
     </div>
   );

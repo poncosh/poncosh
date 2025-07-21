@@ -6,10 +6,12 @@ const ResponsiveContext = createContext<{
   isLowScreen: boolean;
   description: string;
   bannerPictures: string[];
+  quote: string;
 }>({
   isLowScreen: false,
   description: "",
   bannerPictures: [],
+  quote: "",
 });
 
 export function useResponsiveContext() {
@@ -20,10 +22,12 @@ export default function ResponsiveProvider({
   children,
   description,
   bannerPictures,
+  quote,
 }: {
   children: React.ReactNode;
   description: string;
   bannerPictures: string[];
+  quote: string;
 }) {
   const [isClient, setIsClient] = useState(
     typeof window !== "undefined" ? true : false
@@ -37,6 +41,7 @@ export default function ResponsiveProvider({
     isLowScreen: isValidLowScreen,
     description: description,
     bannerPictures: bannerPictures,
+    quote: quote,
   };
 
   useEffect(() => {

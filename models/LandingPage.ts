@@ -17,7 +17,8 @@ class LandingPage extends Model<
   declare social_medium: string | null;
   declare social_email: string | null;
   declare social_github: string | null;
-  declare banner_pictures: string[] | null; // adjust if you know the JSON structure
+  declare banner_pictures: string[] | null;
+  declare quote: string | null;
 }
 
 LandingPage.init(
@@ -53,6 +54,10 @@ LandingPage.init(
     },
     banner_pictures: {
       type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+    },
+    quote: {
+      type: DataTypes.STRING,
       allowNull: true,
     },
   },

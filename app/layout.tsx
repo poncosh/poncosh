@@ -52,8 +52,6 @@ export default async function RootLayout({
 
   const landingPageData: LandingPageType = landingPage.toJSON();
 
-  console.log("Landing Page Data:", landingPageData);
-
   return (
     <html lang="en">
       <body
@@ -68,6 +66,7 @@ export default async function RootLayout({
           <ResponsiveProvider
             description={landingPageData.description}
             bannerPictures={landingPageData.banner_pictures}
+            quote={landingPageData.quote}
           >
             <Header
               social_linkedin={landingPageData.social_linkedin}
