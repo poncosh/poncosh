@@ -6,4 +6,5 @@ export default interface LandingPageType {
   social_medium: string;
   social_email: string;
   social_github: string;
+  banner_pictures: string[];
 }
