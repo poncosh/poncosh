@@ -5,9 +5,9 @@ import { useTheme } from "next-themes";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import Glide from "@glidejs/glide";
 import "@glidejs/glide/dist/css/glide.core.min.css";
 import "@glidejs/glide/dist/css/glide.theme.min.css";
-import Glide from "@glidejs/glide";
 
 const inter = Inter({ weight: "800", subsets: ["latin"] });
 
@@ -29,15 +29,29 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (projectData.length === 0) return;
+    if (!mounted || typeof window === "undefined" || projectData.length === 0)
+      return;
+
+    const glideInstances: any[] = [];
+
     projectData.forEach((project) => {
-      new Glide(`#glide-${project.id}`, {
-        type: "carousel",
-        perView: 3,
-        gap: 16,
-      }).mount();
+      const el = document.getElementById(`glide-${project.id}`);
+      if (el) {
+        const glide = new Glide(el, {
+          type: "slider",
+          perView: 3,
+          gap: 16,
+        });
+        glide.mount();
+        glideInstances.push(glide);
+      }
     });
-  }, [projectData]);
+
+    // Optional: cleanup Glide instances
+    return () => {
+      glideInstances.forEach((glide) => glide.destroy());
+    };
+  }, [projectData, mounted]);
 
   if (!mounted) {
     // Render nothing until mounted to avoid hydration mismatch
@@ -131,38 +145,34 @@ export default function Home() {
           {quote}
         </h1>
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="order-2 md:order-1 flex flex-col gap-4 items-start">
+          <h2 className="font-semibold text-2xl">My Showcase</h2>
+          <p style={{ color: textColor }}>
+            Here are some of my projects that I have worked on.
+          </p>
           {projectData.map((project) => (
             <div
               key={project.id}
-              className="bg-white rounded-2xl shadow-md p-6 space-y-4 transition-transform duration-300 hover:scale-105"
+              style={{ backgroundColor: bgColorStac }}
+              className="rounded-xl shadow p-6 space-y-4 h-fit duration-200 hover:scale-102"
             >
-              <h2 className="text-xl font-semibold text-gray-800">
-                {project.project_name}
-              </h2>
+              <h6 className="text-xl font-semibold">{project.project_name}</h6>
               <div className="glide" id={`glide-${project.id}`}>
                 <div className="glide__track" data-glide-el="track">
                   <ul className="glide__slides">
                     {project.project_portfolios.map((imgUrl, index) => (
                       <li className="glide__slide" key={index}>
-                        <img
+                        <Image
                           src={imgUrl}
                           alt={`portfolio-${index}`}
                           className="w-32 h-32 object-cover rounded-lg border"
+                          width={128}
+                          height={128}
                         />
                       </li>
                     ))}
                   </ul>
-                </div>
-                <div className="glide__bullets" data-glide-el="controls[nav]">
-                  {project.project_portfolios.map((_, index) => (
-                    <button
-                      key={index}
-                      className="glide__bullet"
-                      data-glide-dir={`=${index}`}
-                    ></button>
-                  ))}
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -170,19 +180,19 @@ export default function Home() {
                   <span
                     key={index}
                     className="text-sm px-3 py-1 rounded-full font-medium"
-                    style={{ backgroundColor: stack.color, color: "#fff" }}
+                    style={{ backgroundColor: stack.color, color: "#FFFFFF" }}
                   >
                     {stack.stack_used}
                   </span>
                 ))}
               </div>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600 text-sm" style={{ color: textColor }}>
                 {project.project_description}
               </p>
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 order-1 sm:order-2">
           {techStackType.map((item, index) => (
             <React.Fragment key={index}>
               {/* Judul Type - full width */}

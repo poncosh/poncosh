@@ -75,6 +75,8 @@ export default async function RootLayout({
     })
   )) as TechProjectInt[];
 
+  if (projectData.length === 0) return null;
+
   return (
     <html lang="en">
       <body
