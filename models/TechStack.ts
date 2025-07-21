@@ -16,6 +16,13 @@ class TechStack extends Model<
   declare type_id: ForeignKey<TechStackType["id"]> | null;
   declare stack_used: string | null;
   declare stack_picture: string | null;
+  declare color: string | null;
+  static associate(models: any) {
+    TechStack.belongsTo(models.TechStackType, {
+      foreignKey: "type_id",
+      targetKey: "id",
+    });
+  }
 }
 
 TechStack.init(
@@ -41,6 +48,10 @@ TechStack.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    color: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     sequelize,
@@ -49,3 +60,5 @@ TechStack.init(
     timestamps: false,
   }
 );
+
+export default TechStack;

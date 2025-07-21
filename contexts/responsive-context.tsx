@@ -1,5 +1,7 @@
 "use client";
 
+import TechProjectInt from "@/models/types/tech-project-int";
+import TechStackInt from "@/models/types/tech-stack-int";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const ResponsiveContext = createContext<{
@@ -7,11 +9,15 @@ const ResponsiveContext = createContext<{
   description: string;
   bannerPictures: string[];
   quote: string;
+  techStackType: Array<TechStackInt>;
+  projectData: TechProjectInt[];
 }>({
   isLowScreen: false,
   description: "",
   bannerPictures: [],
   quote: "",
+  techStackType: [],
+  projectData: [],
 });
 
 export function useResponsiveContext() {
@@ -23,15 +29,17 @@ export default function ResponsiveProvider({
   description,
   bannerPictures,
   quote,
+  techStackType,
+  projectData,
 }: {
   children: React.ReactNode;
   description: string;
   bannerPictures: string[];
   quote: string;
+  techStackType: Array<TechStackInt>;
+  projectData: TechProjectInt[];
 }) {
-  const [isClient, setIsClient] = useState(
-    typeof window !== "undefined" ? true : false
-  );
+  const isClient = typeof window !== "undefined";
 
   const [isValidLowScreen, setIsValidLowScreen] = useState<boolean>(
     isClient ? window.innerWidth < 768 : false
@@ -42,20 +50,9 @@ export default function ResponsiveProvider({
     description: description,
     bannerPictures: bannerPictures,
     quote: quote,
+    techStackType: techStackType,
+    projectData: projectData,
   };
-
-  useEffect(() => {
-    setIsClient(true);
-
-    const handleResize = () => {
-      setIsValidLowScreen(window.innerWidth < 768);
-    };
-
-    handleResize(); // initial check
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, [768]);
 
   return (
     <ResponsiveContext.Provider value={exportedVal}>

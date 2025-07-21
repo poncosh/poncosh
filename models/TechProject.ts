@@ -13,7 +13,7 @@ class TechProject extends Model<
   declare id: string;
   declare project_name: string | null;
   declare project_description: string | null;
-  declare project_stacks: Record<string, any> | null; // or a specific type if you know the structure
+  declare project_stacks: string | null; // or a specific type if you know the structure
   declare project_portfolios: string[] | null;
 }
 
@@ -33,7 +33,7 @@ TechProject.init(
       allowNull: true,
     },
     project_stacks: {
-      type: DataTypes.JSONB,
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
     project_portfolios: {

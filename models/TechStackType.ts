@@ -12,6 +12,12 @@ class TechStackType extends Model<
 > {
   declare id: string;
   declare type: string | null;
+  static associate(models: any) {
+    TechStackType.hasMany(models.TechStack, {
+      foreignKey: "type_id",
+      sourceKey: "id",
+    });
+  }
 }
 
 TechStackType.init(

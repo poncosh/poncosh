@@ -10,6 +10,11 @@ import "./globals.css";
 import { ThemeProvider } from "../contexts/theme-provider";
 import ResponsiveProvider from "@/contexts/responsive-context";
 import Header from "@/components/header";
+import configTechStack from "@/config/configTechStack";
+import TechStackInt from "@/models/types/tech-stack-int";
+import TechProject from "@/models/TechProject";
+import { getProjectTechStacks } from "@/config/getProjectTechStacks";
+import TechProjectInt from "@/models/types/tech-project-int";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,7 +41,13 @@ export default async function RootLayout({
     where: { name: "LP_VER" },
   });
 
-  if (!param) {
+  const project = await TechProject.findAll();
+
+  const techStacks = await configTechStack.TechStackType.findAll({
+    include: configTechStack.TechStack,
+  });
+
+  if (!param || !techStacks || !project) {
     return <div>Parameter not found</div>;
   }
 
@@ -51,6 +62,18 @@ export default async function RootLayout({
   }
 
   const landingPageData: LandingPageType = landingPage.toJSON();
+  const techStacksData: Array<TechStackInt> = techStacks.map((techStack) =>
+    techStack.toJSON()
+  );
+  const projectData = (await Promise.all(
+    project.map(async (proj) => {
+      const stacks = await getProjectTechStacks(proj);
+      return {
+        ...proj.toJSON(),
+        project_stacks: stacks.map((stack) => stack.toJSON()),
+      };
+    })
+  )) as TechProjectInt[];
 
   return (
     <html lang="en">
@@ -67,6 +90,8 @@ export default async function RootLayout({
             description={landingPageData.description}
             bannerPictures={landingPageData.banner_pictures}
             quote={landingPageData.quote}
+            techStackType={techStacksData}
+            projectData={projectData}
           >
             <Header
               social_linkedin={landingPageData.social_linkedin}

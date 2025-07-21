@@ -4,13 +4,22 @@ import { useResponsiveContext } from "@/contexts/responsive-context";
 import { useTheme } from "next-themes";
 import { Inter } from "next/font/google";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import "@glidejs/glide/dist/css/glide.core.min.css";
+import "@glidejs/glide/dist/css/glide.theme.min.css";
+import Glide from "@glidejs/glide";
 
 const inter = Inter({ weight: "800", subsets: ["latin"] });
 
 export default function Home() {
-  const { isLowScreen, description, bannerPictures, quote } =
-    useResponsiveContext();
+  const {
+    isLowScreen,
+    description,
+    bannerPictures,
+    quote,
+    techStackType,
+    projectData,
+  } = useResponsiveContext();
   const { theme, systemTheme } = useTheme();
 
   const [mounted, setMounted] = useState(false);
@@ -18,6 +27,17 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (projectData.length === 0) return;
+    projectData.forEach((project) => {
+      new Glide(`#glide-${project.id}`, {
+        type: "carousel",
+        perView: 3,
+        gap: 16,
+      }).mount();
+    });
+  }, [projectData]);
 
   if (!mounted) {
     // Render nothing until mounted to avoid hydration mismatch
@@ -27,6 +47,7 @@ export default function Home() {
   const currentTheme = theme === "system" ? systemTheme : theme;
   const bgColor = currentTheme === "dark" ? "#18181B" : "#FBFAF9";
   const textColor = currentTheme === "dark" ? "#9B9BA4" : "#2E2E31";
+  const bgColorStac = currentTheme === "dark" ? "#343434ff" : "#FFFFFF";
 
   const translateX = isLowScreen ? -120 : -322;
   const overflowClass = isLowScreen ? "overflow-x-hidden" : "overflow-x-hidden";
@@ -109,6 +130,103 @@ export default function Home() {
         >
           {quote}
         </h1>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
+          {projectData.map((project) => (
+            <div
+              key={project.id}
+              className="bg-white rounded-2xl shadow-md p-6 space-y-4 transition-transform duration-300 hover:scale-105"
+            >
+              <h2 className="text-xl font-semibold text-gray-800">
+                {project.project_name}
+              </h2>
+              <div className="glide" id={`glide-${project.id}`}>
+                <div className="glide__track" data-glide-el="track">
+                  <ul className="glide__slides">
+                    {project.project_portfolios.map((imgUrl, index) => (
+                      <li className="glide__slide" key={index}>
+                        <img
+                          src={imgUrl}
+                          alt={`portfolio-${index}`}
+                          className="w-32 h-32 object-cover rounded-lg border"
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="glide__bullets" data-glide-el="controls[nav]">
+                  {project.project_portfolios.map((_, index) => (
+                    <button
+                      key={index}
+                      className="glide__bullet"
+                      data-glide-dir={`=${index}`}
+                    ></button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {project.project_stacks.map((stack, index) => (
+                  <span
+                    key={index}
+                    className="text-sm px-3 py-1 rounded-full font-medium"
+                    style={{ backgroundColor: stack.color, color: "#fff" }}
+                  >
+                    {stack.stack_used}
+                  </span>
+                ))}
+              </div>
+              <p className="text-gray-600 text-sm">
+                {project.project_description}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          {techStackType.map((item, index) => (
+            <React.Fragment key={index}>
+              {/* Judul Type - full width */}
+              <div className="col-span-2 font-bold text-lg">{item.type}</div>
+
+              {/* Tech Stacks */}
+              {item.TECH_STACKs.map((stack, stackIndex) => (
+                <div
+                  style={{ backgroundColor: bgColorStac }}
+                  key={stackIndex}
+                  className="p-4 border rounded-xl shadow flex flex-col items-center duration-200 hover:cursor-pointer hover:scale-105 focus:scale-105"
+                >
+                  {stack.stack_used === "Next.js" && theme === "dark" ? (
+                    <Image
+                      src={"/tech-stack/next-js-dark.png"}
+                      alt={stack.stack_used}
+                      className="w-16 h-16 object-contain mb-2"
+                      width={64}
+                      height={64}
+                    />
+                  ) : stack.stack_used === "Shad CN" && theme === "dark" ? (
+                    <Image
+                      src={"/tech-stack/shad-cn-dark.png"}
+                      alt={stack.stack_used}
+                      className="w-16 h-16 object-contain mb-2"
+                      width={64}
+                      height={64}
+                    />
+                  ) : (
+                    <Image
+                      src={stack.stack_picture}
+                      alt={stack.stack_used}
+                      className="w-16 h-16 object-contain mb-2"
+                      width={64}
+                      height={64}
+                    />
+                  )}
+
+                  <span>{stack.stack_used}</span>
+                </div>
+              ))}
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );
