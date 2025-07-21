@@ -151,7 +151,10 @@ export default function Home() {
         <div className="order-2 md:order-1 mt-8 md:mt-0 flex flex-col gap-4 w-full">
           <h2 className="font-semibold text-2xl">My Showcase</h2>
           <p style={{ color: textColor }}>
-            Here are some of my projects that I have worked on.
+            I'm passionate about building things that matter. Here are some of
+            my projects that I have worked on. I do things like business flow,
+            designing architecture, and implementing features. I also love to
+            learn new technologies and apply them to my projects.
           </p>
           {projectData.map((project) => (
             <div
