@@ -7,4 +7,6 @@ export default interface TechProjectInt {
     color: string;
   }>;
   project_portfolios: string[];
+  link: string | null;
+  roles: string[];
 }

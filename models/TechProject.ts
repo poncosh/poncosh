@@ -15,6 +15,8 @@ class TechProject extends Model<
   declare project_description: string | null;
   declare project_stacks: string | null; // or a specific type if you know the structure
   declare project_portfolios: string[] | null;
+  declare link: string | null;
+  declare roles: string[] | null;
 }
 
 TechProject.init(
@@ -37,6 +39,14 @@ TechProject.init(
       allowNull: true,
     },
     project_portfolios: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+    },
+    link: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    roles: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },

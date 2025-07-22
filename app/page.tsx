@@ -162,7 +162,16 @@ export default function Home() {
               style={{ backgroundColor: bgColorStac }}
               className="rounded-xl shadow p-6 space-y-4 w-full duration-200 hover:scale-102"
             >
-              <h6 className="text-xl font-semibold">{project.project_name}</h6>
+              <h6 className="text-xl font-semibold">
+                {project.link !== null ? (
+                  <a className="underline" href={`${project.link}`}>
+                    {project.project_name}
+                  </a>
+                ) : (
+                  project.project_name
+                )}
+              </h6>
+
               <div className="glide" id={`glide-${project.id}`}>
                 <div className="glide__track" data-glide-el="track">
                   <ul className="glide__slides">
@@ -180,6 +189,7 @@ export default function Home() {
                   </ul>
                 </div>
               </div>
+
               <div className="flex flex-wrap gap-2">
                 {project.project_stacks.map((stack, index) => (
                   <span
@@ -191,11 +201,35 @@ export default function Home() {
                   </span>
                 ))}
               </div>
+
+              {/* NEW: Project Roles */}
+              {project.roles && project.roles.length > 0 && (
+                <ul
+                  className="list-disc list-inside text-sm"
+                  style={{ color: textColor }}
+                >
+                  {project.roles.map((role, idx) => (
+                    <li key={idx}>{role}</li>
+                  ))}
+                </ul>
+              )}
+
               <p className="text-gray-600 text-sm" style={{ color: textColor }}>
                 {project.project_description}
               </p>
             </div>
           ))}
+          {theme === "dark" ? (
+            <div
+              className="w-full h-32 bg-no-repeat bg-contain bg-center"
+              style={{ backgroundImage: "url('/floral-dark.png')" }}
+            />
+          ) : (
+            <div
+              className="w-full h-32 bg-no-repeat bg-contain bg-center"
+              style={{ backgroundImage: "url('/floral-light.png')" }}
+            />
+          )}
         </div>
         <div className="grid grid-cols-2 gap-4 order-1 sm:order-2">
           {techStackType.map((item, index) => (
