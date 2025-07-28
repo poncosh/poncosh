@@ -8,4 +8,5 @@ export default interface LandingPageType {
   social_github: string;
   banner_pictures: string[];
   quote: string;
+  social_twitter: string;
 }

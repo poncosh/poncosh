@@ -19,6 +19,7 @@ class LandingPage extends Model<
   declare social_github: string | null;
   declare banner_pictures: string[] | null;
   declare quote: string | null;
+  declare social_twitter: string | null;
 }
 
 LandingPage.init(
@@ -57,6 +58,10 @@ LandingPage.init(
       allowNull: true,
     },
     quote: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    social_twitter: {
       type: DataTypes.STRING,
       allowNull: true,
     },

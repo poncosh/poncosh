@@ -15,6 +15,7 @@ import TechStackInt from "@/models/types/tech-stack-int";
 import TechProject from "@/models/TechProject";
 import { getProjectTechStacks } from "@/config/getProjectTechStacks";
 import TechProjectInt from "@/models/types/tech-project-int";
+import Footer from "@/components/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -103,6 +104,11 @@ export default async function RootLayout({
             />
             <div>{children}</div>
           </ResponsiveProvider>
+          <Footer
+            social_github={landingPageData.social_github}
+            social_email={landingPageData.social_email}
+            social_twitter={landingPageData.social_twitter}
+          />
         </ThemeProvider>
       </body>
     </html>

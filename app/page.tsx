@@ -4,10 +4,11 @@ import { useResponsiveContext } from "@/contexts/responsive-context";
 import { useTheme } from "next-themes";
 import { Inter } from "next/font/google";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Glide from "@glidejs/glide";
 import "@glidejs/glide/dist/css/glide.core.min.css";
 import "@glidejs/glide/dist/css/glide.theme.min.css";
+import { useSearchParams } from "next/navigation";
 
 const inter = Inter({ weight: "800", subsets: ["latin"] });
 
@@ -20,13 +21,67 @@ export default function Home() {
     techStackType,
     projectData,
   } = useResponsiveContext();
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
   const { theme, systemTheme } = useTheme();
 
   const [mounted, setMounted] = useState(false);
+  const [blogData, setBlogData] = useState<
+    Array<{
+      blog_name: string;
+      blog_image: string;
+      blog_description: string;
+      blog_stack: Array<{
+        stack_used: string;
+        color: string;
+      }>;
+      created_at: string;
+    }>
+  >([]);
+  const [pagesParam, setPagesParam] = useState<{
+    page: number;
+    totalPages: number;
+  }>({
+    page: 1,
+    totalPages: 1,
+  });
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    const page = parseInt(searchParams.get("page") ?? "1");
+    // pakai page di sini
+    (async () => {
+      const res = await fetch(`/api/blogs?page=${page}`);
+
+      if (!res.ok) throw new Error("error when hitting backend");
+
+      const obj: {
+        data: Array<{
+          blog_name: string;
+          blog_image: string;
+          blog_description: string;
+          blog_stack: Array<{
+            stack_used: string;
+            color: string;
+          }>;
+          created_at: string;
+        }>;
+        total: number;
+        page: number;
+        pageSize: number;
+        totalPages: number;
+      } = await res.json();
+
+      setBlogData(obj.data);
+      setPagesParam({
+        page: obj.page,
+        totalPages: obj.totalPages,
+      });
+    })();
+  }, [searchParams.get("page")]);
 
   useEffect(() => {
     if (!mounted || typeof window === "undefined" || projectData.length === 0)
@@ -55,6 +110,30 @@ export default function Home() {
     };
   }, [projectData, mounted]);
 
+  useEffect(() => {
+    if (!mounted || typeof window === "undefined" || projectData.length === 0)
+      return;
+
+    const glide = new Glide(sliderRef.current!, {
+      type: "carousel",
+      perView: 1,
+      gap: 32,
+    });
+
+    glide.on("run.after", () => {
+      setPagesParam({
+        page: glide.index + 1,
+        totalPages: blogData.length,
+      });
+    });
+
+    glide.mount();
+
+    return () => {
+      glide.destroy(); // ✅ ini aman, return-nya void
+    };
+  }, [blogData.length]);
+
   if (!mounted) {
     // Render nothing until mounted to avoid hydration mismatch
     return null;
@@ -71,7 +150,7 @@ export default function Home() {
   return (
     <div
       style={{ backgroundColor: bgColor }}
-      className="mx-4 px-14 md:mx-32 md:px-44 flex flex-col gap-12 pt-32 md:pt-32 min-h-screen border-r-2 border-l-2 border-black-800 shadow-sm"
+      className="mx-4 px-14 md:mx-32 md:px-44 flex flex-col gap-12 pt-32 md:pt-32 pb-20 min-h-screen border-r-2 border-l-2 border-black-800 shadow-sm"
     >
       <div className="flex flex-wrap md:flex-nowrap items-start gap-2 md:gap-10 w-full">
         <Image
@@ -147,7 +226,7 @@ export default function Home() {
           {quote}
         </h1>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
         <div className="order-2 md:order-1 mt-8 md:mt-0 flex flex-col gap-4 w-full">
           <h2 className="font-semibold text-2xl">My Showcase</h2>
           <p style={{ color: textColor }}>
@@ -275,6 +354,69 @@ export default function Home() {
               ))}
             </React.Fragment>
           ))}
+        </div>
+      </div>
+      <div className="w-full">
+        <div ref={sliderRef} className="glide">
+          <div className="glide__track" data-glide-el="track">
+            <ul className="glide__slides">
+              {blogData.map((blog, idx) => (
+                <li key={idx} className="glide__slide">
+                  <div
+                    className="px-6 pt-6 pb-10 rounded-2xl shadow-md border w-full mx-auto"
+                    style={{ backgroundColor: bgColor }}
+                  >
+                    <h2 className="text-2xl font-bold mb-3">
+                      {blog.blog_name}
+                    </h2>
+                    <Image
+                      src={blog.blog_image}
+                      alt={blog.blog_name}
+                      className="w-full h-60 md:h-120 object-cover rounded-xl mb-4"
+                      width={1000}
+                      height={1000}
+                    />
+
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {blog.blog_stack.map((stack, i) => (
+                        <span
+                          key={i}
+                          className="text-white px-3 py-1 rounded-full text-sm"
+                          style={{ backgroundColor: stack.color }}
+                        >
+                          {stack.stack_used}
+                        </span>
+                      ))}
+                    </div>
+
+                    <p className="text-sm mb-2" style={{ color: textColor }}>
+                      {new Date(blog.created_at).toLocaleDateString("en-US", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </p>
+
+                    <p style={{ color: textColor }}>{blog.blog_description}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div
+            className="glide__bullets flex justify-center mt-4 !bottom-6"
+            data-glide-el="controls[nav]"
+          >
+            {blogData.map((_, index) => (
+              <button
+                key={index}
+                className="glide__bullet w-3 h-3 rounded-full mx-1 bg-gray-400"
+                data-glide-dir={`=${index}`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

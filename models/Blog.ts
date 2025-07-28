@@ -11,7 +11,8 @@ class Blog extends Model<InferAttributes<Blog>, InferCreationAttributes<Blog>> {
   declare blog_name: string | null;
   declare blog_image: string | null;
   declare blog_description: string | null;
-  declare blog_stack: Record<string, any> | null; // adjust if you know the JSON structure
+  declare blog_stack: string[] | null; // adjust if you know the JSON structure
+  declare created_at: String | null;
 }
 
 Blog.init(
@@ -34,7 +35,11 @@ Blog.init(
       allowNull: true,
     },
     blog_stack: {
-      type: DataTypes.JSONB,
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+    },
+    created_at: {
+      type: DataTypes.TIME,
       allowNull: true,
     },
   },
