@@ -1,0 +1,10 @@
+.next/
+node_modules/
+.env
+.env.local
+*.log
+*.tsbuildinfo
+.vercel/
+flyio.conf
+.tmp-*.png
+.tmp-*.log
