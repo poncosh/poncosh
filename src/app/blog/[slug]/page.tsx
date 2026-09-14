@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRightIcon } from "@/components/icons";
 import { getPortfolioData, getPostBySlug } from "@/data/portfolio";
-import { absoluteUrl, serializeJsonLd } from "@/lib/site";
+import { absoluteUrl, formatDate, serializeJsonLd, toIsoDateString } from "@/lib/site";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: post.title,
       description: post.excerpt,
       url: absoluteUrl(`/blog/${post.slug}`),
-      publishedTime: post.publishedAt.toISOString(),
+      publishedTime: toIsoDateString(post.publishedAt),
       authors: ["Satrio Ponco Sushadi"],
       images: [{ url: absoluteUrl("/front-photo.png"), width: 1254, height: 1254, alt: "Satrio Ponco Sushadi" }],
     },
@@ -46,8 +46,8 @@ export default async function BlogPost({ params }: PageProps) {
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt,
-    datePublished: post.publishedAt.toISOString(),
-    dateModified: post.publishedAt.toISOString(),
+    datePublished: toIsoDateString(post.publishedAt),
+    dateModified: toIsoDateString(post.publishedAt),
     inLanguage: "id-ID",
     mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
     author: {
@@ -71,8 +71,8 @@ export default async function BlogPost({ params }: PageProps) {
             <p className="section-index">Journal / {post.readingMinutes} min read</p>
             <h1>{post.title}</h1>
             <p>{post.excerpt}</p>
-            <time dateTime={post.publishedAt.toISOString()}>
-              {new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Jakarta" }).format(post.publishedAt)}
+            <time dateTime={toIsoDateString(post.publishedAt)}>
+              {formatDate(post.publishedAt)}
             </time>
           </header>
           <div className="article-body">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/components/icons";
 import { getPortfolioData } from "@/data/portfolio";
-import { absoluteUrl, serializeJsonLd } from "@/lib/site";
+import { absoluteUrl, formatDate, serializeJsonLd, toIsoDateString } from "@/lib/site";
 
 export const revalidate = 3600;
 
@@ -29,7 +29,7 @@ export default async function BlogIndex() {
       "@type": "BlogPosting",
       headline: post.title,
       url: absoluteUrl(`/blog/${post.slug}`),
-      datePublished: post.publishedAt.toISOString(),
+      datePublished: toIsoDateString(post.publishedAt),
     })),
   };
 
@@ -50,7 +50,7 @@ export default async function BlogIndex() {
                 <span className="post-number">{String(index + 1).padStart(2, "0")}</span>
                 <div>
                   <p className="post-meta">
-                    {new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Jakarta" }).format(post.publishedAt)} · {post.readingMinutes} menit baca
+                    {formatDate(post.publishedAt)} · {post.readingMinutes} menit baca
                   </p>
                   <h2><Link href={`/blog/${post.slug}`}>{post.title}</Link></h2>
                   <p>{post.excerpt}</p>

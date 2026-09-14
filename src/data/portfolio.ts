@@ -93,14 +93,25 @@ const getCachedPortfolioData = unstable_cache(
   },
 );
 
+function hydratePortfolioData(data: PortfolioData): PortfolioData {
+  return {
+    ...data,
+    posts: data.posts.map((post) => ({
+      ...post,
+      publishedAt: new Date(post.publishedAt),
+    })),
+  };
+}
+
 async function readPortfolio(): Promise<PortfolioData> {
-  if (shouldUseBuildFallback()) return fallbackData;
+  if (shouldUseBuildFallback()) return hydratePortfolioData(fallbackData);
 
   try {
-    return await getCachedPortfolioData();
+    const data = await getCachedPortfolioData();
+    return hydratePortfolioData(data);
   } catch (error) {
     console.warn("Portfolio database unavailable; using bundled seed data.", error);
-    return fallbackData;
+    return hydratePortfolioData(fallbackData);
   }
 }
 
