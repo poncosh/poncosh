@@ -22,17 +22,21 @@ export function SiteHeader({ emailUrl = "mailto:satrioppp98@gmail.com" }: { emai
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    closeButtonRef.current?.focus();
+
+    const focusTimer = setTimeout(() => {
+      closeButtonRef.current?.focus({ preventScroll: true });
+    }, 120);
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setMenuOpen(false);
-        menuButtonRef.current?.focus();
+        menuButtonRef.current?.focus({ preventScroll: true });
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
+      clearTimeout(focusTimer);
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };

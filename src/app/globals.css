@@ -199,12 +199,12 @@ a {
 
 .menu-layer {
   position: fixed;
-  z-index: 80;
+  z-index: 90;
   inset: 0;
   pointer-events: none;
   visibility: hidden;
   overflow: hidden;
-  transition: visibility 0s linear 420ms;
+  transition: visibility 0s linear 360ms;
 }
 
 .menu-layer.is-open {
@@ -214,7 +214,7 @@ a {
 }
 
 .menu-scrim {
-  position: absolute;
+  position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
@@ -222,6 +222,8 @@ a {
   cursor: pointer;
   border: 0;
   background: rgba(7, 9, 8, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   opacity: 0;
   transition: opacity 320ms ease;
 }
@@ -231,23 +233,33 @@ a {
 }
 
 .mobile-drawer {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
+  bottom: 0;
+  left: auto;
+  z-index: 91;
   display: flex;
   flex-direction: column;
-  width: min(440px, 88vw);
+  width: min(420px, 88vw);
   height: 100%;
+  height: 100dvh;
   padding: 26px 28px 34px;
   color: var(--ink);
   background: var(--paper);
-  box-shadow: -24px 0 80px rgba(0, 0, 0, 0.18);
-  transform: translateX(100%);
-  transition: transform 420ms cubic-bezier(0.76, 0, 0.24, 1);
+  border-left: 1px solid var(--line);
+  box-shadow: -16px 0 48px rgba(0, 0, 0, 0.22);
+  transform: translate3d(100%, 0, 0);
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  pointer-events: auto;
 }
 
 .menu-layer.is-open .mobile-drawer {
-  transform: translateX(0);
+  transform: translate3d(0, 0, 0);
+  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .drawer-head {
