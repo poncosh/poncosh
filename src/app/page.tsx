@@ -1,10 +1,16 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, ArrowUpRightIcon, SkillIcon, SocialIcon } from "@/components/icons";
 import { SiteHeader } from "@/components/site-header";
 import { getPortfolioData } from "@/data/portfolio";
+import { absoluteUrl, serializeJsonLd } from "@/lib/site";
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const rotations = ["-3deg", "2deg", "-1deg", "3deg", "-2deg"];
 
@@ -12,9 +18,48 @@ export default async function Home() {
   const data = await getPortfolioData();
   const { profile } = data;
   const emailUrl = data.socials.find((social) => social.platform === "email")?.url ?? "mailto:satrioppp98@gmail.com";
+  const personId = absoluteUrl("/#person");
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": absoluteUrl("/#website"),
+        url: absoluteUrl("/"),
+        name: `${profile.fullName} — Portfolio`,
+        inLanguage: "id-ID",
+        author: { "@id": personId },
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": absoluteUrl("/#profile"),
+        url: absoluteUrl("/"),
+        name: `${profile.fullName} — Software Engineer`,
+        mainEntity: { "@id": personId },
+      },
+      {
+        "@type": "Person",
+        "@id": personId,
+        name: profile.fullName,
+        url: absoluteUrl("/"),
+        image: absoluteUrl(profile.portraitPath),
+        jobTitle: "Software Engineer",
+        description: profile.description,
+        email: emailUrl.replace("mailto:", ""),
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Jakarta",
+          addressCountry: "ID",
+        },
+        worksFor: { "@type": "Organization", name: "BNI" },
+        sameAs: data.socials.filter((social) => social.url.startsWith("https://")).map((social) => social.url),
+      },
+    ],
+  };
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
       <SiteHeader emailUrl={emailUrl} />
       <main>
         <section className="hero shell" id="about" aria-labelledby="hero-title">

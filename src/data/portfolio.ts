@@ -15,8 +15,21 @@ import {
 import { fallbackData } from "./fallback";
 import type { PortfolioData, Post, Skill } from "./types";
 
+function shouldUseBuildFallback() {
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) return true;
+
+  if (process.env.NEXT_PHASE !== "phase-production-build") return false;
+
+  try {
+    return new URL(connectionString).hostname.endsWith(".internal");
+  } catch {
+    return false;
+  }
+}
+
 async function readPortfolio(): Promise<PortfolioData> {
-  if (!process.env.DATABASE_URL) return fallbackData;
+  if (shouldUseBuildFallback()) return fallbackData;
 
   try {
     const db = getDb();
@@ -83,4 +96,3 @@ export const getPostBySlug = cache(async (slug: string): Promise<Post | null> =>
   const data = await getPortfolioData();
   return data.posts.find((post) => post.slug === slug) ?? null;
 });
-

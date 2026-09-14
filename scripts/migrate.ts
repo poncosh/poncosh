@@ -9,7 +9,7 @@ if (!connectionString) throw new Error("DATABASE_URL is required");
 
 const client = new Client({
   connectionString,
-  ssl: process.env.DATABASE_SSL === "true" ? { rejectUnauthorized: false } : false,
+  ssl: process.env.DATABASE_SSL === "true" ? { rejectUnauthorized: true } : false,
 });
 
 const migrationPath = resolve(process.cwd(), "drizzle/0000_portfolio.sql");
@@ -29,4 +29,3 @@ try {
 } finally {
   await client.end();
 }
-

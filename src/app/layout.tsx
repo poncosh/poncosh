@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { absoluteUrl, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const themeInitializer = `
@@ -19,13 +20,48 @@ export const metadata: Metadata = {
     default: "Satrio Ponco Sushadi — Software Engineer",
     template: "%s — Satrio Ponco Sushadi",
   },
-  description: "A storyteller and software engineer at BNI, based in Jakarta.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  description: "Portfolio Satrio Ponco Sushadi, seorang storyteller dan software engineer di BNI yang berbasis di Jakarta.",
+  applicationName: "Satrio Ponco Sushadi — Portfolio",
+  authors: [{ name: "Satrio Ponco Sushadi", url: "https://github.com/poncosh" }],
+  creator: "Satrio Ponco Sushadi",
+  publisher: "Satrio Ponco Sushadi",
+  category: "technology",
+  keywords: [
+    "Satrio Ponco Sushadi",
+    "software engineer Indonesia",
+    "software engineer BNI",
+    "Next.js developer",
+    "Go developer",
+    "TypeScript developer",
+    "Jakarta software engineer",
+    "portfolio software engineer",
+  ],
+  metadataBase: new URL(siteUrl),
   openGraph: {
     title: "Satrio Ponco Sushadi",
     description: "A storyteller and software engineer.",
-    images: [{ url: "/front-photo.png", width: 1254, height: 1254 }],
+    url: siteUrl,
+    siteName: "Satrio Ponco Sushadi — Portfolio",
+    locale: "id_ID",
+    images: [{ url: absoluteUrl("/front-photo.png"), width: 1254, height: 1254, alt: "Satrio Ponco Sushadi" }],
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Satrio Ponco Sushadi",
+    description: "A storyteller and software engineer.",
+    images: [absoluteUrl("/front-photo.png")],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 

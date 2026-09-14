@@ -32,6 +32,7 @@ Konten profil, sosial media, galeri, proyek, skill, pengalaman, dan journal dike
 | **Selected work** | BNIdirect Bisnis, OASE BNI, skill SVG, dan pengalaman CI/CD. |
 | **Field notes** | Journal dengan halaman artikel statis yang bersumber dari database. |
 | **Light & dark** | Mengikuti tema sistem, dapat diganti manual, dan tersimpan di browser. |
+| **Search-ready** | Canonical metadata, Open Graph, JSON-LD, image sitemap, dan robots policy. |
 | **Resilient data** | PostgreSQL sebagai sumber utama dengan fallback read-only untuk build. |
 
 ## Built with
@@ -48,15 +49,15 @@ Konten profil, sosial media, galeri, proyek, skill, pengalaman, dan journal dike
 - **Frontend:** Next.js App Router, React Server Components, TypeScript, CSS.
 - **Data:** PostgreSQL, Drizzle ORM, idempotent DDL dan DML.
 - **Media:** `next/image` untuk seluruh foto raster, SVG untuk seluruh ikon skill.
-- **Delivery:** Vercel di region Singapore, database pada Fly.io.
+- **Delivery:** Vercel di region Singapore, Nginx TCP gateway, dan database privat pada Fly.io.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
     U([Visitor]) --> V[Vercel CDN<br/>Next.js]
-    V -->|PostgreSQL over TLS| F[Fly Proxy<br/>pg_tls]
-    F --> D[(PostgreSQL<br/>portfolio schema)]
+    V -->|PostgreSQL over TLS| N[Nginx stream<br/>public gateway]
+    N -->|WireGuard flyio| D[(Fly PostgreSQL<br/>portfolio schema)]
     V -. database unavailable .-> S[Bundled seed<br/>read-only fallback]
 ```
 
@@ -82,8 +83,15 @@ Buka [http://localhost:3000](http://localhost:3000). Jangan commit `.env` atau `
 | Variable | Required | Fungsi |
 | --- | :---: | --- |
 | `DATABASE_URL` | Production | PostgreSQL connection string yang disimpan sebagai secret. |
-| `DATABASE_SSL` | No | Isi `true` untuk koneksi Fly Proxy TLS. |
+| `DATABASE_SSL` | No | Isi `true` untuk koneksi TLS end-to-end melalui gateway. |
+| `DATABASE_POOL_MAX` | No | Maksimum koneksi pool per instance; default `15`. |
+| `DATABASE_CONNECTION_TIMEOUT_MS` | No | Batas membuka koneksi; default `5000`. |
+| `DATABASE_IDLE_TIMEOUT_MS` | No | Tutup koneksi idle setelah `30000` ms. |
+| `DATABASE_STATEMENT_TIMEOUT_MS` | No | Batalkan statement setelah `15000` ms. |
+| `DATABASE_MAX_LIFETIME_SECONDS` | No | Rotasi koneksi setelah `300` detik. |
 | `NEXT_PUBLIC_SITE_URL` | Recommended | URL production untuk metadata dan Open Graph. |
+
+`NEXT_PUBLIC_SITE_URL` juga menjadi sumber canonical URL, `sitemap.xml`, dan `robots.txt`. Di Vercel, aplikasi dapat memakai `VERCEL_PROJECT_PRODUCTION_URL` secara otomatis bila nilai tersebut tidak diatur manual.
 
 ## Database workflow
 
@@ -110,9 +118,9 @@ npm run build
 
 ## Deploying
 
-`portfolio-poncosh.internal` hanya tersedia melalui private network Fly 6PN. Untuk Vercel Hobby/Pro, gunakan hostname publik Fly dengan handler PostgreSQL TLS dan role aplikasi read-only. WireGuard berjalan pada host admin untuk migrasi—bukan di dalam Vercel Function.
+`portfolio-poncosh.internal` hanya tersedia melalui private network Fly 6PN. Vercel mengakses Nginx TCP gateway publik, sedangkan gateway menjalankan WireGuard dan meneruskan koneksi ke hostname internal. WireGuard tidak dijalankan di dalam Vercel Function.
 
-Panduan lengkap, konfigurasi `pg_tls`, pembuatan role, dan environment Vercel tersedia di **[Deployment Guide](docs/DEPLOYMENT.md)**.
+Panduan deployment tersedia di **[Deployment Guide](docs/DEPLOYMENT.md)** dan template server siap salin berada di **[Gateway Guide](infra/gateway/README.md)**.
 
 ---
 
@@ -120,4 +128,3 @@ Panduan lengkap, konfigurasi `pg_tls`, pembuatan role, dan environment Vercel te
   Designed and engineered with curiosity in Jakarta.<br />
   <strong>© 2026 Satrio Ponco Sushadi</strong>
 </p>
-

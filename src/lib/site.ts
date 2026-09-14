@@ -1,0 +1,25 @@
+const fallbackUrl = "http://localhost:3000";
+
+function resolveSiteUrl() {
+  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (configuredUrl) return configuredUrl;
+
+  const vercelProductionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (vercelProductionUrl) return `https://${vercelProductionUrl}`;
+
+  const vercelDeploymentUrl = process.env.VERCEL_URL?.trim();
+  if (vercelDeploymentUrl) return `https://${vercelDeploymentUrl}`;
+
+  return fallbackUrl;
+}
+
+export const siteUrl = resolveSiteUrl().replace(/\/$/, "");
+
+export function absoluteUrl(path = "/") {
+  return new URL(path, `${siteUrl}/`).toString();
+}
+
+export function serializeJsonLd(value: unknown) {
+  return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
