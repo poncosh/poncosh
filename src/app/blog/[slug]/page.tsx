@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRightIcon } from "@/components/icons";
-import { SiteHeader } from "@/components/site-header";
 import { getPortfolioData, getPostBySlug } from "@/data/portfolio";
 import { absoluteUrl, serializeJsonLd } from "@/lib/site";
 
@@ -42,7 +41,6 @@ export default async function BlogPost({ params }: PageProps) {
   const { slug } = await params;
   const [post, data] = await Promise.all([getPostBySlug(slug), getPortfolioData()]);
   if (!post) notFound();
-  const emailUrl = data.socials.find((social) => social.platform === "email")?.url ?? "mailto:satrioppp98@gmail.com";
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -66,9 +64,8 @@ export default async function BlogPost({ params }: PageProps) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
-      <SiteHeader emailUrl={emailUrl} />
       <main className="article-shell">
-        <Link className="back-link" href="/#journal"><ArrowRightIcon /> Back to journal</Link>
+        <Link className="back-link" href="/blog"><ArrowRightIcon /> Back to blog</Link>
         <article>
           <header className="article-header">
             <p className="section-index">Journal / {post.readingMinutes} min read</p>

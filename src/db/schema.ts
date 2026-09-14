@@ -1,5 +1,6 @@
 import {
   boolean,
+  index,
   integer,
   pgSchema,
   primaryKey,
@@ -18,6 +19,7 @@ export const profiles = portfolio.table("profiles", {
   eyebrow: varchar("eyebrow", { length: 120 }).notNull(),
   tagline: varchar("tagline", { length: 180 }).notNull(),
   description: varchar("description", { length: 400 }).notNull(),
+  biography: text("biography").notNull(),
   portraitPath: varchar("portrait_path", { length: 255 }).notNull(),
   location: varchar("location", { length: 120 }).notNull(),
   availability: varchar("availability", { length: 160 }).notNull(),
@@ -31,7 +33,9 @@ export const socialLinks = portfolio.table("social_links", {
   label: varchar("label", { length: 80 }).notNull(),
   url: varchar("url", { length: 255 }).notNull(),
   sortOrder: integer("sort_order").default(0).notNull(),
-});
+}, (table) => [
+  index("social_links_profile_sort_idx").on(table.profileId, table.sortOrder, table.id),
+]);
 
 export const photos = portfolio.table("photos", {
   id: serial("id").primaryKey(),
@@ -41,7 +45,9 @@ export const photos = portfolio.table("photos", {
   width: integer("width").notNull(),
   height: integer("height").notNull(),
   sortOrder: integer("sort_order").default(0).notNull(),
-});
+}, (table) => [
+  index("photos_sort_idx").on(table.sortOrder, table.id),
+]);
 
 export const skills = portfolio.table("skills", {
   id: serial("id").primaryKey(),
@@ -60,13 +66,19 @@ export const projects = portfolio.table("projects", {
   summary: text("summary").notNull(),
   url: varchar("url", { length: 255 }),
   sortOrder: integer("sort_order").default(0).notNull(),
-}, (table) => [uniqueIndex("projects_slug_unique").on(table.slug)]);
+}, (table) => [
+  uniqueIndex("projects_slug_unique").on(table.slug),
+  index("projects_sort_idx").on(table.sortOrder, table.id),
+]);
 
 export const projectSkills = portfolio.table("project_skills", {
   projectId: integer("project_id").references(() => projects.id, { onDelete: "cascade" }).notNull(),
   skillId: integer("skill_id").references(() => skills.id, { onDelete: "cascade" }).notNull(),
   sortOrder: integer("sort_order").default(0).notNull(),
-}, (table) => [primaryKey({ columns: [table.projectId, table.skillId] })]);
+}, (table) => [
+  primaryKey({ columns: [table.projectId, table.skillId] }),
+  index("project_skills_project_sort_idx").on(table.projectId, table.sortOrder, table.skillId),
+]);
 
 export const experiences = portfolio.table("experiences", {
   id: serial("id").primaryKey(),
@@ -74,13 +86,18 @@ export const experiences = portfolio.table("experiences", {
   kicker: varchar("kicker", { length: 80 }).notNull(),
   summary: text("summary").notNull(),
   sortOrder: integer("sort_order").default(0).notNull(),
-});
+}, (table) => [
+  index("experiences_sort_idx").on(table.sortOrder, table.id),
+]);
 
 export const experienceSkills = portfolio.table("experience_skills", {
   experienceId: integer("experience_id").references(() => experiences.id, { onDelete: "cascade" }).notNull(),
   skillId: integer("skill_id").references(() => skills.id, { onDelete: "cascade" }).notNull(),
   sortOrder: integer("sort_order").default(0).notNull(),
-}, (table) => [primaryKey({ columns: [table.experienceId, table.skillId] })]);
+}, (table) => [
+  primaryKey({ columns: [table.experienceId, table.skillId] }),
+  index("experience_skills_experience_sort_idx").on(table.experienceId, table.sortOrder, table.skillId),
+]);
 
 export const posts = portfolio.table("posts", {
   id: serial("id").primaryKey(),
@@ -93,5 +110,7 @@ export const posts = portfolio.table("posts", {
   readingMinutes: integer("reading_minutes").default(1).notNull(),
   publishedAt: timestamp("published_at", { withTimezone: true }).notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
-}, (table) => [uniqueIndex("posts_slug_unique").on(table.slug)]);
-
+}, (table) => [
+  uniqueIndex("posts_slug_unique").on(table.slug),
+  index("posts_status_published_idx").on(table.status, table.publishedAt, table.id),
+]);

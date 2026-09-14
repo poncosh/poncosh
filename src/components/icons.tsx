@@ -37,6 +37,14 @@ export function SocialIcon({ platform, ...props }: IconProps & { platform: strin
     );
   }
 
+  if (platform === "linkedin") {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+        <path d="M5.2 3.4A2.2 2.2 0 1 1 5.2 7.8 2.2 2.2 0 0 1 5.2 3.4ZM3.3 9.4h3.8v11.3H3.3V9.4Zm6.1 0H13v1.5h.1c.5-.9 1.7-1.9 3.6-1.9 3.9 0 4.6 2.5 4.6 5.9v5.8h-3.8v-5.1c0-1.2 0-2.8-1.8-2.8s-2 1.3-2 2.7v5.2H9.4V9.4Z" />
+      </svg>
+    );
+  }
+
   if (platform === "instagram") {
     return (
       <svg {...baseProps} aria-hidden="true" {...props}>
@@ -100,4 +108,3 @@ function iconPath(iconKey: string) {
       return <><rect x="8" y="8" width="32" height="32" rx="8" /><path d="M16 24h16M24 16v16" /></>;
   }
 }
-

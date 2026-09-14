@@ -18,6 +18,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ...data.photos.map((photo) => absoluteUrl(photo.src)),
       ],
     },
+    {
+      url: absoluteUrl("/blog"),
+      lastModified: new Date("2026-09-14T00:00:00.000Z"),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: absoluteUrl("/about"),
+      lastModified: new Date("2026-09-14T00:00:00.000Z"),
+      changeFrequency: "monthly",
+      priority: 0.8,
+      images: [absoluteUrl(data.profile.portraitPath)],
+    },
     ...data.posts.map((post) => ({
       url: absoluteUrl(`/blog/${post.slug}`),
       lastModified: post.publishedAt,
@@ -26,4 +39,3 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ];
 }
-

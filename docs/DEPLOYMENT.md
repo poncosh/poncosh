@@ -9,25 +9,28 @@ Vercel Node.js Function (`sslnegotiation=direct`)
         │ direct TLS
         ▼
 Nginx stream TLS pada server gateway:6432
+        │ PostgreSQL plaintext pada jaringan lokal gateway
+        ▼
+PgBouncer
         │ TCP melalui WireGuard flyio
         ▼
 portfolio-poncosh.internal:5432
 ```
 
-Nginx mengakhiri direct TLS lalu meneruskan PostgreSQL StartupMessage ke Fly.
-Pooling tetap dikelola aplikasi dengan maksimum 15 koneksi per instance. Perlu
-diingat bahwa limit itu bukan batas global; beberapa instance Vercel dapat
-menghasilkan kelipatan 15 koneksi database.
+Nginx mengakhiri direct TLS lalu meneruskan PostgreSQL StartupMessage ke
+PgBouncer. Pool aplikasi tetap dibatasi 15 koneksi per instance; PgBouncer
+mengendalikan jumlah koneksi upstream ke Fly. Limit aplikasi bukan batas global,
+karena beberapa instance Vercel dapat menghasilkan kelipatan 15 client.
 
 Template Nginx, instalasi WireGuard kedua di samping `wg0`, split DNS Fly, dan
 firewall tersedia di [`infra/gateway/README.md`](../infra/gateway/README.md).
 
-## TLS tanpa PgBouncer
+## TLS melalui Nginx dan PgBouncer
 
 Dependency `pg@8.23.0` mendukung direct TLS negotiation. Connection string wajib
 memuat `sslnegotiation=direct`, sehingga Nginx stream dapat menjadi terminator
-TLS biasa. Sertifikat publik berada pada Nginx, sementara hop selanjutnya sudah
-dienkripsi oleh WireGuard.
+TLS biasa. Sertifikat publik berada pada Nginx. PgBouncer berada di belakang
+Nginx, lalu koneksi menuju Fly dilindungi WireGuard.
 
 Jangan menghapus `sslnegotiation=direct`: tanpa opsi itu driver mengirim
 PostgreSQL SSLRequest terlebih dahulu, yang bukan handshake TLS yang diharapkan
@@ -55,12 +58,12 @@ menjalankan migrasi dan seed.
 Pada Project → Settings → Environment Variables, isi Production dan Preview:
 
 ```dotenv
-DATABASE_URL=postgresql://portfolio_app:<PASSWORD_URL_ENCODED>@db-gateway.example.com:6432/postgres?sslmode=verify-full&sslnegotiation=direct
+DATABASE_URL=postgresql://portfolio_app:<PASSWORD_URL_ENCODED>@wg.fafr.my.id:6432/postgres?sslmode=verify-full&sslnegotiation=direct
 DATABASE_SSL=true
 DATABASE_POOL_MAX=15
 DATABASE_CONNECTION_TIMEOUT_MS=5000
 DATABASE_IDLE_TIMEOUT_MS=30000
-DATABASE_STATEMENT_TIMEOUT_MS=15000
+DATABASE_QUERY_TIMEOUT_MS=15000
 DATABASE_MAX_LIFETIME_SECONDS=300
 NEXT_PUBLIC_SITE_URL=https://domain-portfolio.example
 ```

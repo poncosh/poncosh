@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, ArrowUpRightIcon, SkillIcon, SocialIcon } from "@/components/icons";
-import { SiteHeader } from "@/components/site-header";
 import { getPortfolioData } from "@/data/portfolio";
 import { absoluteUrl, serializeJsonLd } from "@/lib/site";
 
@@ -60,9 +59,8 @@ export default async function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
-      <SiteHeader emailUrl={emailUrl} />
-      <main>
-        <section className="hero shell" id="about" aria-labelledby="hero-title">
+      <main className="home-page">
+        <section className="hero shell" id="home" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="eyebrow"><span />{profile.eyebrow}</p>
             <h1 id="hero-title">{profile.tagline}</h1>
@@ -91,8 +89,7 @@ export default async function Home() {
             <p className="portrait-note">Currently <span>↘</span><br />{profile.availability}</p>
           </div>
           <div className="hero-name" aria-label={profile.fullName}>
-            <span>{profile.fullName.split(" ").slice(0, 2).join(" ")}</span>
-            <span>{profile.fullName.split(" ").slice(2).join(" ")}</span>
+            <span>{profile.fullName}</span>
           </div>
         </section>
 

@@ -30,12 +30,20 @@ export const fallbackData: PortfolioData = {
     tagline: "A storyteller and software engineer.",
     description:
       "Saya adalah software engineer di BNI yang senang mengubah ide menjadi produk digital yang sederhana, tangguh, dan berguna. Di sela membangun sistem, saya gemar mengeksplorasi teknologi baru, mencatat cerita dari proses belajar, serta bertukar perspektif dengan orang-orang di sekitar. Di luar layar, saya rutin bermain fun football—ruang kecil untuk bergerak, tertawa, dan menjaga keseimbangan hidup.",
+    biography: `Saya Satrio Ponco Sushadi, seorang software developer yang memegang prinsip “ora et labora”: menyatukan keyakinan, kerja yang tekun, dan kemauan untuk terus belajar. Bagi saya, teknologi bukan sekadar kumpulan tools, melainkan cara untuk menyederhanakan persoalan dan membangun pengalaman yang benar-benar berguna.
+
+Hari ini saya berkarya di BNI dan bertumbuh di lingkungan digital banking yang menuntut ketelitian, ketangguhan, serta rasa tanggung jawab. Dari merawat sistem enterprise hingga membangun antarmuka dan layanan modern, saya belajar bahwa software yang baik lahir dari pemahaman terhadap manusia, proses bisnis, dan konsekuensi dari setiap keputusan teknis.
+
+Perjalanan tersebut membawa saya melintasi Java, Oracle, dan .NET, lalu berkembang bersama TypeScript, Next.js, Go, container, serta praktik CI/CD. Saya menikmati proses menjembatani teknologi lama dan baru—menjaga sistem tetap dapat diandalkan sembari membuka ruang untuk perubahan yang lebih baik.
+
+Di luar pekerjaan, saya adalah seorang pencerita yang senang merekam pelajaran dari proses, mengeksplorasi perspektif baru, dan menjaga hidup tetap seimbang lewat keluarga serta fun football. Saya ingin terus membuat sesuatu yang berguna, membagikan apa yang saya pelajari, dan menjadi sedikit lebih baik dari hari sebelumnya.`,
     portraitPath: "/front-photo.png",
     location: "Jakarta, Indonesia",
     availability: "Building reliable digital banking experiences at BNI.",
   },
   socials: [
     { platform: "github", label: "GitHub", url: "https://github.com/poncosh" },
+    { platform: "linkedin", label: "LinkedIn", url: "https://www.linkedin.com/in/satrio-ponco-sushadi" },
     { platform: "instagram", label: "Instagram", url: "https://instagram.com/satriopo" },
     { platform: "email", label: "Email", url: "mailto:satrioppp98@gmail.com" },
   ],

@@ -12,6 +12,7 @@ export type PortfolioData = {
     eyebrow: string;
     tagline: string;
     description: string;
+    biography: string;
     portraitPath: string;
     location: string;
     availability: string;
@@ -52,4 +53,3 @@ export type Post = {
   publishedAt: Date;
   readingMinutes: number;
 };
-

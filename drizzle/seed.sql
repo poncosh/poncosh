@@ -1,16 +1,18 @@
 BEGIN;
 
 INSERT INTO portfolio.profiles
-  (id, full_name, eyebrow, tagline, description, portrait_path, location, availability)
+  (id, full_name, eyebrow, tagline, description, biography, portrait_path, location, availability)
 VALUES
   (1, 'Satrio Ponco Sushadi', 'Software engineer · Jakarta, Indonesia', 'A storyteller and software engineer.',
    'Saya adalah software engineer di BNI yang senang mengubah ide menjadi produk digital yang sederhana, tangguh, dan berguna. Di sela membangun sistem, saya gemar mengeksplorasi teknologi baru, mencatat cerita dari proses belajar, serta bertukar perspektif dengan orang-orang di sekitar. Di luar layar, saya rutin bermain fun football—ruang kecil untuk bergerak, tertawa, dan menjaga keseimbangan hidup.',
+   'Saya Satrio Ponco Sushadi, seorang software developer yang memegang prinsip “ora et labora”: menyatukan keyakinan, kerja yang tekun, dan kemauan untuk terus belajar. Bagi saya, teknologi bukan sekadar kumpulan tools, melainkan cara untuk menyederhanakan persoalan dan membangun pengalaman yang benar-benar berguna.\n\nHari ini saya berkarya di BNI dan bertumbuh di lingkungan digital banking yang menuntut ketelitian, ketangguhan, serta rasa tanggung jawab. Dari merawat sistem enterprise hingga membangun antarmuka dan layanan modern, saya belajar bahwa software yang baik lahir dari pemahaman terhadap manusia, proses bisnis, dan konsekuensi dari setiap keputusan teknis.\n\nPerjalanan tersebut membawa saya melintasi Java, Oracle, dan .NET, lalu berkembang bersama TypeScript, Next.js, Go, container, serta praktik CI/CD. Saya menikmati proses menjembatani teknologi lama dan baru—menjaga sistem tetap dapat diandalkan sembari membuka ruang untuk perubahan yang lebih baik.\n\nDi luar pekerjaan, saya adalah seorang pencerita yang senang merekam pelajaran dari proses, mengeksplorasi perspektif baru, dan menjaga hidup tetap seimbang lewat keluarga serta fun football. Saya ingin terus membuat sesuatu yang berguna, membagikan apa yang saya pelajari, dan menjadi sedikit lebih baik dari hari sebelumnya.',
    '/front-photo.png', 'Jakarta, Indonesia', 'Building reliable digital banking experiences at BNI.')
 ON CONFLICT (id) DO UPDATE SET
   full_name = EXCLUDED.full_name,
   eyebrow = EXCLUDED.eyebrow,
   tagline = EXCLUDED.tagline,
   description = EXCLUDED.description,
+  biography = EXCLUDED.biography,
   portrait_path = EXCLUDED.portrait_path,
   location = EXCLUDED.location,
   availability = EXCLUDED.availability,
@@ -18,14 +20,15 @@ ON CONFLICT (id) DO UPDATE SET
 
 INSERT INTO portfolio.social_links (id, profile_id, platform, label, url, sort_order) VALUES
   (1, 1, 'github', 'GitHub', 'https://github.com/poncosh', 1),
-  (2, 1, 'instagram', 'Instagram', 'https://instagram.com/satriopo', 2),
-  (3, 1, 'email', 'Email', 'mailto:satrioppp98@gmail.com', 3)
+  (2, 1, 'instagram', 'Instagram', 'https://instagram.com/satriopo', 3),
+  (3, 1, 'email', 'Email', 'mailto:satrioppp98@gmail.com', 4),
+  (4, 1, 'linkedin', 'LinkedIn', 'https://www.linkedin.com/in/satrio-ponco-sushadi', 2)
 ON CONFLICT (id) DO UPDATE SET
   profile_id = EXCLUDED.profile_id, platform = EXCLUDED.platform, label = EXCLUDED.label,
   url = EXCLUDED.url, sort_order = EXCLUDED.sort_order;
 
 INSERT INTO portfolio.photos (id, src, alt, caption, width, height, sort_order) VALUES
-  (1, '/list-photo/1.jpeg', 'Satrio bersama keponakan di rumah', 'Small joys', 1201, 1600, 1),
+  (1, '/list-photo/1.jpeg', 'Satrio bersama anak di rumah', 'Small joys', 1201, 1600, 1),
   (2, '/list-photo/2.jpeg', 'Satrio berkunjung ke kantor AWS', 'Keep exploring', 1200, 1600, 2),
   (3, '/list-photo/3.jpeg', 'Satrio berenang bersama keluarga', 'Weekend stories', 900, 1600, 3),
   (4, '/list-photo/4.jpeg', 'Potret keluarga Satrio', 'My people', 1201, 1600, 4),

@@ -6,11 +6,15 @@ CREATE TABLE IF NOT EXISTS "portfolio"."profiles" (
   "eyebrow" varchar(120) NOT NULL,
   "tagline" varchar(180) NOT NULL,
   "description" varchar(400) NOT NULL,
+  "biography" text NOT NULL,
   "portrait_path" varchar(255) NOT NULL,
   "location" varchar(120) NOT NULL,
   "availability" varchar(160) NOT NULL,
   "updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
+--> statement-breakpoint
+ALTER TABLE "portfolio"."profiles"
+  ADD COLUMN IF NOT EXISTS "biography" text NOT NULL DEFAULT '';
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "portfolio"."social_links" (
   "id" serial PRIMARY KEY NOT NULL,
@@ -23,6 +27,9 @@ CREATE TABLE IF NOT EXISTS "portfolio"."social_links" (
     FOREIGN KEY ("profile_id") REFERENCES "portfolio"."profiles"("id") ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "social_links_profile_sort_idx"
+  ON "portfolio"."social_links" ("profile_id", "sort_order", "id");
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "portfolio"."photos" (
   "id" serial PRIMARY KEY NOT NULL,
   "src" varchar(255) NOT NULL,
@@ -32,6 +39,9 @@ CREATE TABLE IF NOT EXISTS "portfolio"."photos" (
   "height" integer NOT NULL,
   "sort_order" integer DEFAULT 0 NOT NULL
 );
+--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "photos_sort_idx"
+  ON "portfolio"."photos" ("sort_order", "id");
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "portfolio"."skills" (
   "id" serial PRIMARY KEY NOT NULL,
@@ -56,6 +66,9 @@ CREATE TABLE IF NOT EXISTS "portfolio"."projects" (
 --> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "projects_slug_unique" ON "portfolio"."projects" ("slug");
 --> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "projects_sort_idx"
+  ON "portfolio"."projects" ("sort_order", "id");
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "portfolio"."project_skills" (
   "project_id" integer NOT NULL,
   "skill_id" integer NOT NULL,
@@ -67,6 +80,9 @@ CREATE TABLE IF NOT EXISTS "portfolio"."project_skills" (
     FOREIGN KEY ("skill_id") REFERENCES "portfolio"."skills"("id") ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "project_skills_project_sort_idx"
+  ON "portfolio"."project_skills" ("project_id", "sort_order", "skill_id");
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "portfolio"."experiences" (
   "id" serial PRIMARY KEY NOT NULL,
   "title" varchar(140) NOT NULL,
@@ -74,6 +90,9 @@ CREATE TABLE IF NOT EXISTS "portfolio"."experiences" (
   "summary" text NOT NULL,
   "sort_order" integer DEFAULT 0 NOT NULL
 );
+--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "experiences_sort_idx"
+  ON "portfolio"."experiences" ("sort_order", "id");
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "portfolio"."experience_skills" (
   "experience_id" integer NOT NULL,
@@ -85,6 +104,9 @@ CREATE TABLE IF NOT EXISTS "portfolio"."experience_skills" (
   CONSTRAINT "experience_skills_skill_id_skills_id_fk"
     FOREIGN KEY ("skill_id") REFERENCES "portfolio"."skills"("id") ON DELETE cascade
 );
+--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "experience_skills_experience_sort_idx"
+  ON "portfolio"."experience_skills" ("experience_id", "sort_order", "skill_id");
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "portfolio"."posts" (
   "id" serial PRIMARY KEY NOT NULL,
@@ -101,4 +123,6 @@ CREATE TABLE IF NOT EXISTS "portfolio"."posts" (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "posts_slug_unique" ON "portfolio"."posts" ("slug");
-
+--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "posts_status_published_idx"
+  ON "portfolio"."posts" ("status", "published_at", "id");

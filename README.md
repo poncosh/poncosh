@@ -57,11 +57,12 @@ Konten profil, sosial media, galeri, proyek, skill, pengalaman, dan journal dike
 flowchart LR
     U([Visitor]) --> V[Vercel CDN<br/>Next.js]
     V -->|PostgreSQL over TLS| N[Nginx stream<br/>public gateway]
-    N -->|WireGuard flyio| D[(Fly PostgreSQL<br/>portfolio schema)]
+    N --> P[PgBouncer]
+    P -->|WireGuard flyio| D[(Fly PostgreSQL<br/>portfolio schema)]
     V -. database unavailable .-> S[Bundled seed<br/>read-only fallback]
 ```
 
-Halaman utama memakai ISR selama satu jam. Pool production dibatasi satu koneksi per instance untuk menjaga database portfolio tetap ringan.
+Semua data portfolio memakai Data Cache Next.js selama satu jam. Pool aplikasi dibatasi 15 koneksi per instance, sedangkan PgBouncer mengendalikan koneksi upstream ke PostgreSQL.
 
 ## Run it locally
 
@@ -87,7 +88,7 @@ Buka [http://localhost:3000](http://localhost:3000). Jangan commit `.env` atau `
 | `DATABASE_POOL_MAX` | No | Maksimum koneksi pool per instance; default `15`. |
 | `DATABASE_CONNECTION_TIMEOUT_MS` | No | Batas membuka koneksi; default `5000`. |
 | `DATABASE_IDLE_TIMEOUT_MS` | No | Tutup koneksi idle setelah `30000` ms. |
-| `DATABASE_STATEMENT_TIMEOUT_MS` | No | Batalkan statement setelah `15000` ms. |
+| `DATABASE_QUERY_TIMEOUT_MS` | No | Batalkan query dari sisi aplikasi setelah `15000` ms. |
 | `DATABASE_MAX_LIFETIME_SECONDS` | No | Rotasi koneksi setelah `300` detik. |
 | `NEXT_PUBLIC_SITE_URL` | Recommended | URL production untuk metadata dan Open Graph. |
 

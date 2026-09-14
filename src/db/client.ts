@@ -33,7 +33,7 @@ function createPool() {
     keepAliveInitialDelayMillis: 10_000,
     max: positiveInteger("DATABASE_POOL_MAX", 15),
     maxLifetimeSeconds: positiveInteger("DATABASE_MAX_LIFETIME_SECONDS", 300),
-    statement_timeout: positiveInteger("DATABASE_STATEMENT_TIMEOUT_MS", 15_000),
+    query_timeout: positiveInteger("DATABASE_QUERY_TIMEOUT_MS", 15_000),
     ssl: process.env.DATABASE_SSL === "true" ? { rejectUnauthorized: true } : false,
   });
 }
