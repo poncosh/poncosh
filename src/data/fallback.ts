@@ -21,6 +21,9 @@ const skillCatalog = {
   openshift: skill(10, "OpenShift Container Platform", "openshift", "openshift", "#ee0000"),
   jenkins: skill(11, "Jenkins", "jenkins", "jenkins", "#d33833"),
   harbor: skill(12, "Harbor", "harbor", "harbor", "#60b932"),
+  rust: skill(13, "Rust", "rust", "rust", "#ce422b"),
+  vue: skill(14, "Vue.js", "vuejs", "vue", "#42b883"),
+  webview2: skill(15, "WebView2", "webview2", "webview2", "#0078d4"),
 };
 
 export const fallbackData: PortfolioData = {
@@ -56,12 +59,23 @@ Di luar pekerjaan, saya adalah seorang pencerita yang senang merekam pelajaran d
   ],
   projects: [
     {
+      id: 3,
+      title: "DBX",
+      slug: "dbx",
+      kicker: "Open source contribution · DBX",
+      summary: "Menambahkan fitur export explain plan agar hasil analisis query dapat disimpan sebagai file. Pull request t8y2/dbx#11120 telah di-merge ke main.",
+      url: "https://dbxio.com/en",
+      contributionUrl: "https://github.com/t8y2/dbx/pull/11120",
+      skills: [skillCatalog.rust, skillCatalog.go, skillCatalog.vue, skillCatalog.webview2],
+    },
+    {
       id: 1,
       title: "BNIdirect Bisnis",
       slug: "bnidirect-bisnis",
       kicker: "Digital banking · BNI",
       summary: "Platform digital banking untuk membantu nasabah bisnis mengelola kebutuhan transaksi dan aktivitas finansial perusahaan secara terintegrasi.",
       url: "https://directbisnis.bni.co.id",
+      contributionUrl: null,
       skills: [skillCatalog.weblogic, skillCatalog.jdk, skillCatalog.oracle, skillCatalog.next, skillCatalog.typescript, skillCatalog.go],
     },
     {
@@ -71,6 +85,7 @@ Di luar pekerjaan, saya adalah seorang pencerita yang senang merekam pelajaran d
       kicker: "Internal platform · BNI",
       summary: "Aplikasi internal yang mendukung alur kerja operasional BNI, dibangun dan dipelihara dengan fondasi teknologi Microsoft yang stabil.",
       url: null,
+      contributionUrl: null,
       skills: [skillCatalog.dotnet, skillCatalog.sqlserver],
     },
   ],
@@ -84,6 +99,18 @@ Di luar pekerjaan, saya adalah seorang pencerita yang senang merekam pelajaran d
     },
   ],
   posts: [
+    {
+      slug: "export-explain-plan-dbx",
+      title: "Dari Keresahan Menjadi Kontribusi: Export Explain Plan di DBX",
+      excerpt: "Cerita di balik kontribusi fitur export explain plan ke DBX, berawal dari kebutuhan sederhana untuk menyimpan hasil analisis query sebagai file.",
+      body: `Keresahan ini berawal dari kebutuhan yang cukup sederhana: saya ingin menyimpan hasil explain plan sebagai file. Explain plan sangat berguna untuk memahami cara database mengeksekusi query, tetapi hasilnya tidak selalu praktis untuk didokumentasikan, dibagikan kepada rekan, atau dibandingkan kembali di kemudian hari ketika hanya tersedia di dalam aplikasi.
+
+Dari kebutuhan tersebut, saya mencoba berkontribusi ke DBX dengan menambahkan fitur export pada explain plan. Tujuannya adalah membuat hasil analisis query lebih mudah dibawa keluar dari aplikasi dan digunakan dalam alur kerja sehari-hari, tanpa harus menyalin isinya secara manual setiap kali dibutuhkan.
+
+Perubahan ini saya kirim melalui pull request t8y2/dbx#11120 dan akhirnya berhasil di-merge ke branch main. Kontribusi ini mungkin terlihat kecil, tetapi bagi saya menjadi pengalaman yang menyenangkan: sebuah keresahan nyata dapat diubah menjadi fitur yang berguna, lalu dibagikan kembali kepada komunitas open source.`,
+      publishedAt: new Date("2026-10-06T02:00:00.000Z"),
+      readingMinutes: 2,
+    },
     {
       slug: "manifesting-2026",
       title: "Manifesting 2026",

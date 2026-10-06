@@ -104,6 +104,12 @@ function iconPath(iconKey: string) {
       return <><circle cx="24" cy="16" r="9" /><path d="M16 23c-4 4-5 11-4 17h24c1-6 0-13-4-17M18 28l6 7 6-7M20 14c2 2 6 2 8 0M19 11h.1M29 11h.1" /></>;
     case "harbor":
       return <><path d="M24 5v34M14 13h20M17 21h14M20 29h8M9 39h30" /><path d="M12 39c4-5 6-8 12-8s8 3 12 8" /></>;
+    case "rust":
+      return <><circle cx="24" cy="24" r="12" /><path d="M24 6v6M24 36v6M6 24h6M36 24h6M11 11l5 5M32 32l5 5M37 11l-5 5M16 32l-5 5" /><path d="M19 30V18h7c6 0 6 8 0 8h-7M26 26l5 5" /></>;
+    case "vue":
+      return <><path d="M6 10h9l9 15 9-15h9L24 40Z" /><path d="M15 10h6l3 5 3-5h6l-9 15Z" /></>;
+    case "webview2":
+      return <><path d="M8 13h32v24H8Z" /><path d="M8 19h32M12 16h.1M16 16h.1" /><path d="M17 31c1-6 12-9 17-4-2 7-12 10-17 4Z" /><path d="M18 30c3-1 7 0 9 3" /></>;
     default:
       return <><rect x="8" y="8" width="32" height="32" rx="8" /><path d="M16 24h16M24 16v16" /></>;
   }

@@ -65,6 +65,7 @@ export const projects = portfolio.table("projects", {
   kicker: varchar("kicker", { length: 80 }).notNull(),
   summary: text("summary").notNull(),
   url: varchar("url", { length: 255 }),
+  contributionUrl: varchar("contribution_url", { length: 255 }),
   sortOrder: integer("sort_order").default(0).notNull(),
 }, (table) => [
   uniqueIndex("projects_slug_unique").on(table.slug),

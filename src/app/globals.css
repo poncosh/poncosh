@@ -836,6 +836,12 @@ html[data-theme="dark"] .private-label {
   text-transform: uppercase;
 }
 
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 24px;
+}
+
 .text-link {
   padding-bottom: 5px;
   border-bottom: 1px solid currentColor;

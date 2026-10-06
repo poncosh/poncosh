@@ -49,25 +49,33 @@ INSERT INTO portfolio.skills (id, name, slug, category, icon_key, accent) VALUES
   (9, 'Docker', 'docker', 'platform', 'docker', '#2496ed'),
   (10, 'OpenShift Container Platform', 'openshift', 'platform', 'openshift', '#ee0000'),
   (11, 'Jenkins', 'jenkins', 'cicd', 'jenkins', '#d33833'),
-  (12, 'Harbor', 'harbor', 'cicd', 'harbor', '#60b932')
+  (12, 'Harbor', 'harbor', 'cicd', 'harbor', '#60b932'),
+  (13, 'Rust', 'rust', 'language', 'rust', '#ce422b'),
+  (14, 'Vue.js', 'vuejs', 'frontend', 'vue', '#42b883'),
+  (15, 'WebView2', 'webview2', 'desktop', 'webview2', '#0078d4')
 ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name, slug = EXCLUDED.slug, category = EXCLUDED.category,
   icon_key = EXCLUDED.icon_key, accent = EXCLUDED.accent;
 
-INSERT INTO portfolio.projects (id, title, slug, kicker, summary, url, sort_order) VALUES
+INSERT INTO portfolio.projects (id, title, slug, kicker, summary, url, contribution_url, sort_order) VALUES
   (1, 'BNIdirect Bisnis', 'bnidirect-bisnis', 'Digital banking · BNI',
    'Platform digital banking untuk membantu nasabah bisnis mengelola kebutuhan transaksi dan aktivitas finansial perusahaan secara terintegrasi.',
-   'https://directbisnis.bni.co.id', 1),
+   'https://directbisnis.bni.co.id', NULL, 2),
   (2, 'OASE BNI', 'oase-bni', 'Internal platform · BNI',
    'Aplikasi internal yang mendukung alur kerja operasional BNI, dibangun dan dipelihara dengan fondasi teknologi Microsoft yang stabil.',
-   NULL, 2)
+   NULL, NULL, 3),
+  (3, 'DBX', 'dbx', 'Open source contribution · DBX',
+   'Menambahkan fitur export explain plan agar hasil analisis query dapat disimpan sebagai file. Pull request t8y2/dbx#11120 telah di-merge ke main.',
+   'https://dbxio.com/en', 'https://github.com/t8y2/dbx/pull/11120', 1)
 ON CONFLICT (id) DO UPDATE SET
   title = EXCLUDED.title, slug = EXCLUDED.slug, kicker = EXCLUDED.kicker,
-  summary = EXCLUDED.summary, url = EXCLUDED.url, sort_order = EXCLUDED.sort_order;
+  summary = EXCLUDED.summary, url = EXCLUDED.url,
+  contribution_url = EXCLUDED.contribution_url, sort_order = EXCLUDED.sort_order;
 
 INSERT INTO portfolio.project_skills (project_id, skill_id, sort_order) VALUES
   (1, 1, 1), (1, 2, 2), (1, 3, 3), (1, 4, 4), (1, 5, 5), (1, 6, 6),
-  (2, 7, 1), (2, 8, 2)
+  (2, 7, 1), (2, 8, 2),
+  (3, 13, 1), (3, 6, 2), (3, 14, 3), (3, 15, 4)
 ON CONFLICT (project_id, skill_id) DO UPDATE SET sort_order = EXCLUDED.sort_order;
 
 INSERT INTO portfolio.experiences (id, title, kicker, summary, sort_order) VALUES
@@ -87,7 +95,11 @@ VALUES
   (1, 'manifesting-2026', 'Manifesting 2026',
    'Tentang target untuk menguasai skill baru, menjaga rasa ingin tahu, dan terus bertumbuh—satu langkah kecil yang konsisten setiap hari.',
    E'2026 bukan tentang mengejar sebanyak mungkin pencapaian. Tahun ini adalah tentang membangun kapasitas: belajar lebih dalam, bekerja lebih tenang, dan memberi ruang untuk hal-hal yang membuat hidup terasa utuh.\n\nTarget utama saya adalah menguasai skill baru yang memperkuat fondasi sebagai software engineer. Saya ingin lebih tajam dalam system design, memahami praktik cloud-native secara menyeluruh, dan semakin percaya diri membangun produk dari ide hingga berjalan stabil di production.\n\nSaya juga ingin terus berkembang sebagai storyteller. Pengalaman teknis menjadi lebih berarti ketika dapat dijelaskan dengan sederhana, dibagikan, dan membantu orang lain mengambil langkah pertamanya.\n\nDi luar pekerjaan, saya ingin hadir lebih penuh untuk keluarga, menjaga tubuh tetap aktif lewat fun football, serta tetap membuka diri terhadap tempat, orang, dan perspektif baru.\n\nManifestasi ini bukan janji tentang hasil yang sempurna. Ini adalah kompas: belajar dengan sengaja, membuat sesuatu yang berguna, dan menjadi sedikit lebih baik setiap hari.',
-   'published', true, 3, '2026-01-05 09:00:00+07')
+   'published', true, 3, '2026-01-05 09:00:00+07'),
+  (2, 'export-explain-plan-dbx', 'Dari Keresahan Menjadi Kontribusi: Export Explain Plan di DBX',
+   'Cerita di balik kontribusi fitur export explain plan ke DBX, berawal dari kebutuhan sederhana untuk menyimpan hasil analisis query sebagai file.',
+   E'Keresahan ini berawal dari kebutuhan yang cukup sederhana: saya ingin menyimpan hasil explain plan sebagai file. Explain plan sangat berguna untuk memahami cara database mengeksekusi query, tetapi hasilnya tidak selalu praktis untuk didokumentasikan, dibagikan kepada rekan, atau dibandingkan kembali di kemudian hari ketika hanya tersedia di dalam aplikasi.\n\nDari kebutuhan tersebut, saya mencoba berkontribusi ke DBX dengan menambahkan fitur export pada explain plan. Tujuannya adalah membuat hasil analisis query lebih mudah dibawa keluar dari aplikasi dan digunakan dalam alur kerja sehari-hari, tanpa harus menyalin isinya secara manual setiap kali dibutuhkan.\n\nPerubahan ini saya kirim melalui pull request t8y2/dbx#11120 dan akhirnya berhasil di-merge ke branch main. Kontribusi ini mungkin terlihat kecil, tetapi bagi saya menjadi pengalaman yang menyenangkan: sebuah keresahan nyata dapat diubah menjadi fitur yang berguna, lalu dibagikan kembali kepada komunitas open source.',
+   'published', true, 2, '2026-10-06 09:00:00+07')
 ON CONFLICT (id) DO UPDATE SET
   slug = EXCLUDED.slug, title = EXCLUDED.title, excerpt = EXCLUDED.excerpt,
   body = EXCLUDED.body, status = EXCLUDED.status, featured = EXCLUDED.featured,

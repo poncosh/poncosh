@@ -1,4 +1,4 @@
-import { asc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { getDb } from "@/db/client";
@@ -38,7 +38,7 @@ async function readPortfolioFromDatabase(): Promise<PortfolioData> {
         db.select().from(photos).orderBy(asc(photos.sortOrder), asc(photos.id)),
         db.select().from(projects).orderBy(asc(projects.sortOrder), asc(projects.id)),
         db.select().from(experiences).orderBy(asc(experiences.sortOrder), asc(experiences.id)),
-        db.select().from(posts).where(eq(posts.status, "published")).orderBy(asc(posts.publishedAt), asc(posts.id)),
+        db.select().from(posts).where(eq(posts.status, "published")).orderBy(desc(posts.publishedAt), desc(posts.id)),
         db.select({
           projectId: projectSkills.projectId,
           id: skills.id,

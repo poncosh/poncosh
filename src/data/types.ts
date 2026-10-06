@@ -33,6 +33,7 @@ export type PortfolioData = {
     kicker: string;
     summary: string;
     url: string | null;
+    contributionUrl: string | null;
     skills: Skill[];
   }>;
   experiences: Array<{

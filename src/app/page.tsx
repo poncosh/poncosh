@@ -133,9 +133,16 @@ export default async function Home() {
                   <h3>{project.title}</h3>
                   <p className="project-summary">{project.summary}</p>
                   {project.url ? (
-                    <a className="text-link" href={project.url} target="_blank" rel="noreferrer">
-                      Visit project <ArrowUpRightIcon />
-                    </a>
+                    <div className="project-links">
+                      <a className="text-link" href={project.url} target="_blank" rel="noreferrer">
+                        Visit project <ArrowUpRightIcon />
+                      </a>
+                      {project.contributionUrl ? (
+                        <a className="text-link" href={project.contributionUrl} target="_blank" rel="noreferrer">
+                          View merged PR <ArrowUpRightIcon />
+                        </a>
+                      ) : null}
+                    </div>
                   ) : <span className="private-label">Internal project · no public link</span>}
                 </div>
                 <ul className="skill-list" aria-label={`Teknologi untuk ${project.title}`}>

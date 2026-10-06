@@ -10,7 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     {
       url: absoluteUrl("/"),
-      lastModified: new Date("2026-09-14T00:00:00.000Z"),
+      lastModified: new Date("2026-10-06T00:00:00.000Z"),
       changeFrequency: "weekly",
       priority: 1,
       images: [
@@ -20,7 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: absoluteUrl("/blog"),
-      lastModified: new Date("2026-09-14T00:00:00.000Z"),
+      lastModified: new Date("2026-10-06T00:00:00.000Z"),
       changeFrequency: "weekly",
       priority: 0.8,
     },

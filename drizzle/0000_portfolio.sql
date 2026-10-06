@@ -61,8 +61,12 @@ CREATE TABLE IF NOT EXISTS "portfolio"."projects" (
   "kicker" varchar(80) NOT NULL,
   "summary" text NOT NULL,
   "url" varchar(255),
+  "contribution_url" varchar(255),
   "sort_order" integer DEFAULT 0 NOT NULL
 );
+--> statement-breakpoint
+ALTER TABLE "portfolio"."projects"
+  ADD COLUMN IF NOT EXISTS "contribution_url" varchar(255);
 --> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "projects_slug_unique" ON "portfolio"."projects" ("slug");
 --> statement-breakpoint
